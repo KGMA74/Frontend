@@ -1,7 +1,7 @@
 'use client';
 
 import { Children } from "react";
-import { makeStore } from "./store";
+import { Store } from "./store";
 import { Provider } from "react-redux";
 
 interface props {
@@ -10,7 +10,7 @@ interface props {
 
 const CustomProviver: React.FC<props> = ({children}) => {
     return (
-        <Provider store={makeStore()}>
+        <Provider store={Store()}>
             {children}
         </Provider>
     );
