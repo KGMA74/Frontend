@@ -6,12 +6,15 @@ import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useAnimationFrame } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
+import { toast } from "react-toastify";
+import useLogout from "@/hooks/useLogout";
 
 const Header = () =>  {
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
     const pathname = usePathname();
-    console.log(useSearchParams())
-
+    console.log(useSearchParams());
+    const {onClickLogout, isLoading} = useLogout()
     return (
     <header className="w-full flex items-center justify-between px-2 py-1">
         <Logo/>
@@ -30,7 +33,7 @@ const Header = () =>  {
             </nav>
             <div className="bg-red-500/95 ml-5 py-2 px-2 rounded-2xl">
                 {isAuthenticated?
-                    <Link href='/auth/logout'>Logout</Link>
+                    <button onClick={() => onClickLogout()}>Logout</button>
                     :<Link href='/auth/login-register'>Login</Link>
                 }
             </div>

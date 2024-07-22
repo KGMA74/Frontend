@@ -5,7 +5,6 @@
 *{
     @apply list-none p-0 m-0 outline-none scroll-smooth;
     scrollbar-width: none;
-    scrollbar-color: orange;
     outline: none;
 }
 

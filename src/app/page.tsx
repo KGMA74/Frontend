@@ -2,11 +2,16 @@
 import Post from "@/components/Post";
 import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
-import type { postType, commentType } from "@/utils/type";
+import type { postType } from "@/utils/type";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { checkAccessToken } from "@/redux/features/authSlice";
+import { request } from "http";
 
 const Home = () => {
-    const [posts, setPosts] = useState<postType[]>([]);
 
+    
+    const [posts, setPosts] = useState<postType[]>([]);
+    
     const getPost = async () => {
         //error handling
         const posts = await api.get("posts/").json<postType[]>();
@@ -34,6 +39,7 @@ const Home = () => {
                 <hr />
                 Activity
             </div>
+
         </main>
     );
 };
