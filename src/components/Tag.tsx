@@ -21,7 +21,7 @@ export const Tag2: React.FC<props> = ({ name, description }) => {
 const Tag: React.FC<props> = ({ name, description }) => {
   return (
     <div className="relative inline-block group">
-      <span className="mx-1 bg-gray-800 text-white py-1 px-3 rounded-xl cursor-pointer">
+      <span className="mx-1 bg-black text-white py-1 px-3 rounded-xl cursor-pointer">
         {name}
       </span>
       <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 hidden group-hover:block bg-white w-[200px] text-center text-black p-2 rounded-lg shadow-lg z-50">

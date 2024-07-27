@@ -1,6 +1,7 @@
 import { apiSlice } from "../services/apiSlice";
 
 interface User {
+    id: number;
     nickname: string;
     email: string;
 }
@@ -76,7 +77,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 
         //activation
         activation: builder.mutation({
-            query: ({ uid, token }) => ({
+            query: ({ uid, token }: {uid: string, token: string}) => ({
                 url: `/users/activation/`,
                 method: "POST",
                 body: { uid, token },

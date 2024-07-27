@@ -6,8 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useAnimationFrame } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
-import { useLogoutMutation } from "@/redux/features/authApiSlice";
-import { toast } from "react-toastify";
+
 import useLogout from "@/hooks/useLogout";
 
 const Header = () =>  {

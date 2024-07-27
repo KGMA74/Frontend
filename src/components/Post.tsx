@@ -317,13 +317,16 @@ import type { postType, commentType, voteType, tagType } from "@/utils/type";
 import { useEffect, useState, useCallback } from "react";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 
 interface Props {
     post: postType;
 }
 
 const Post: React.FC<Props> = ({ post }) => {
+    const retrieveUser = useRetrieveUserQuery();
     const userId = 1; // Vous pourriez vouloir obtenir ceci dynamiquement
+    const [user, setUser] = useState({id: -2, nickname: "anonuser", email: ""})
     const [owner, setOwner] = useState({ nickname: "anonymous", email: "" });
     const [userVote, setUserVote] = useState<voteType>();
     const [comments, setComments] = useState<commentType[]>([]);
@@ -332,6 +335,12 @@ const Post: React.FC<Props> = ({ post }) => {
     const [upvotes, setUpvotes] = useState(0);
     const [downvotes, setDownvotes] = useState(0);
     const [loading, setLoading] = useState(false);
+
+    const fetchUser = useCallback(async () => {
+        retrieveUser(unknown)
+            .unwrap()
+            .then((res) => setUser(res))
+    }, [user.id])
 
     const fetchOwner = useCallback(async () => {
         try {
@@ -414,8 +423,8 @@ const Post: React.FC<Props> = ({ post }) => {
     }, [fetchOwner, fetchComments, fetchUserVote, fetchTags, fetchVotes]);
 
     return (
-        <div className="w-11/12 h-[400px] bg-gray-800 border border-gray-700 rounded-2xl shadow-lg m-2 p-4 text-white">
-            <div className="flex items-center mb-4">
+        <div className="w-11/12 h-[400px] bg-gray-800 border border-gray-700/90 rounded-2xl shadow-lg m-2 p-4 text-white">
+            <div className="h-1/6 py-4 px-3 flex items-center">
                 <Link href="/" className="flex items-center">
                     <Image
                         src="/moi.png"
@@ -428,7 +437,7 @@ const Post: React.FC<Props> = ({ post }) => {
                     <span className="ml-2 font-semibold">{owner.nickname}</span>
                 </Link>
             </div>
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-5/6">
                 <div className="flex-grow">
                     <p className="mb-4">{post.details}</p>
                     <div className="flex flex-wrap gap-2">
@@ -467,6 +476,68 @@ const Post: React.FC<Props> = ({ post }) => {
                     <div className="flex items-center bg-gray-700 p-2 rounded-full">
                         <span className="mr-2">{comments.length}</span>
                         <span>comments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+    return (
+        <div className="w-11/12 h-[400px] bg-transparent backdrop-blur-3xl border border-gray-700/90 rounded-2xl shadow-lg m-2">
+            <div className="h-1/6 py-4 px-3">
+                <Link href="/" className="flex items-center">
+                    <Image
+                        src="/moi.png"
+                        alt="profile"
+                        width={35}
+                        height={35}
+                        priority
+                        className="mr-3 p-1 border rounded-full"
+                    />
+                    <span>{owner.nickname}</span>
+                </Link>
+            </div>
+            <div className="flex flex-col px-2 h-5/6 py-3 bg-white/10 rounded-b-2xl">
+                <div className="px-2">
+                    <p>{post.details}</p>
+                    <div className="mt-1 flex">
+                        {tags.map((tag, index) => (
+                            <Tag name={tag.name} description={tag.description} key={index} />
+                        ))}
+                    </div>
+                </div>
+                <div className="mt-auto flex justify-between px-2">
+                    <div className="flex">
+                        <div className="flex flex-col justify-center items-center bg-white/10 mr-2 px-2">
+                            <small>{upvotes} likes</small>
+                            <button onClick={() => handleVote("like")}>
+                                <Image
+                                    src="/moi.png"
+                                    alt="like"
+                                    width={30}
+                                    height={30}
+                                    priority
+                                    className="mt-1 mr-3 p-1 border rounded-full"
+                                />
+                            </button>
+                        </div>
+                        <div className="flex flex-col justify-center items-center bg-white/10 px-2">
+                            <small>{downvotes} unlikes</small>
+                            <button onClick={() => handleVote("dislike")}>
+                                <Image
+                                    src="/moi.png"
+                                    alt="unlike"
+                                    width={30}
+                                    height={30}
+                                    priority
+                                    className="mt-1 mr-3 p-1 border rounded-full"
+                                />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="m-2 border py-2 px-3 rounded-3xl text-base cursor-pointer">
+                        <small className="pr-1">{comments.length}</small>
+                        <small>comments</small>
                     </div>
                 </div>
             </div>
