@@ -22,8 +22,15 @@ const loginFields: InputProps[] = [
     placeholder: 'enter your password',
     type: 'password',
     required: true,
+  },
+  {
+    name: 'image',
+    label: 'image',
+    type: 'file',
+    required: false,
   }
 ]
+
 const LoginForm: React.FC<props> = ({submitHandler, NotSigned, error}) => {
     return (
         <form

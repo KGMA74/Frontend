@@ -24,6 +24,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         }),
 
         socialAuthenticate: builder.mutation({
+            //this part for so
             query: ({ provider, state, code }) => ({
                 url: `/o/${provider}?state=${encodeURIComponent(
                     state
@@ -114,4 +115,6 @@ export const{
     useActivationMutation,
     useResetPasswordMutation,
     useResetPasswordConfirmMutation,
+
+   
   } = authApiSlice;

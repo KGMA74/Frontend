@@ -1,6 +1,6 @@
 export interface postType {
     id: number,
-    owner: number,
+    author: number,
     category: number,
     tags: number,
     title: string,
@@ -12,7 +12,7 @@ export interface postType {
 export interface commentType {
     id: number,
     post: number,
-    owner: number,
+    author: number,
     content: string,
     created: string, 
     updated: string,
@@ -20,15 +20,24 @@ export interface commentType {
 
 export interface voteType {
     id: number,
-    owner: number,
+    author: number,
     post: number,
-    type: number,
+    type: string,
     created: string, 
     updated: string,
 }
 
 export interface tagType {
-    id: number;
     name: string;
     description: string;
+}
+
+export interface ProfileType {
+    id: number,
+    photo: string,
+    reputation: number,
+    bio: string,
+    confirmed: boolean,
+    updated: string,
+
 }
