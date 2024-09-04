@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import LoginForm from "@/components/form/LoginForm";
 import RegisterForm from "@/components/form/RegisterForm";
 import {useLogin, useRegister } from "@/hooks/";
-import Image from "next/image";
 
 const Page = () => {
 

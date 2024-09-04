@@ -16,8 +16,8 @@ interface Props {
 
 const Post: React.FC<Props> = ({ post }) => {
     const { data: user, error, isLoading } = useRetrieveUserQuery();
-    const [author, setauthor] = useState({ nickname: "anonymous", email: "" });
-    const [userVote, setUserVote] = useState<voteType>();
+    const [author, setAuthor] = useState({ nickname: "anonymous", email: "" });
+    const [userVote, setUserVote] = useState<voteType | null>();
     const [commentsNbr, setCommentsNbr] = useState<number>(0);
     const [tags, setTags] = useState<tagType[]>([]);
     const [voteStatus, setVoteStatus] = useState<string>(""); 
