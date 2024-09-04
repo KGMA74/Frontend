@@ -15,9 +15,7 @@ interface Props {
 }
 
 const Post: React.FC<Props> = ({ post }) => {
-    const retrieveUser = useRetrieveUserQuery();
-    const userId = 1; // Vous pourriez vouloir obtenir ceci dynamiquement
-    const [user, setUser] = useState({id: -2, nickname: "anonuser", email: ""})
+    const { data: user, error, isLoading } = useRetrieveUserQuery();
     const [author, setauthor] = useState({ nickname: "anonymous", email: "" });
     const [userVote, setUserVote] = useState<voteType>();
     const [commentsNbr, setCommentsNbr] = useState<number>(0);
@@ -26,12 +24,6 @@ const Post: React.FC<Props> = ({ post }) => {
     const [upvotes, setUpvotes] = useState(0);
     const [downvotes, setDownvotes] = useState(0);
     const [loading, setLoading] = useState(false);
-
-    const fetchUser = useCallback(async () => {
-        retrieveUser(unknown)
-            .unwrap()
-            .then((res) => setUser(res))
-    }, [user.id])
 
     const fetchAuthor = useCallback(async () => {
         try {
@@ -44,13 +36,13 @@ const Post: React.FC<Props> = ({ post }) => {
 
     const fetchUserVote = useCallback(async () => {
         try {
-            const userVoteData = await api.get(`posts/${post.id}/user/${userId}/vote/`).json<voteType>();
+            const userVoteData = await api.get(`posts/${post.id}/user/${user?.id}/vote/`).json<voteType>();
             setUserVote(userVoteData);
             setVoteStatus(userVoteData.type);
         } catch (error) {
             console.error("Failed to fetch user vote:", error);
         }
-    }, [post.id, userId]);
+    }, [post.id]);
 
     const fetchCommentsNbr = useCallback(async () => {
         try {
@@ -85,7 +77,7 @@ const Post: React.FC<Props> = ({ post }) => {
         try {
             if (!userVote) {
                 await api.post(`vote/`, { // le user n avait pas voter
-                    json: { author: post.author, post: post.id, type: voteType },
+                    json: { author: user?.id, post: post.id, type: voteType },
                 });
             } else if (userVote.type === voteType) {
                 await api.delete(`unvote/${userVote.id}/`)
