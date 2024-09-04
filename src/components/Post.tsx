@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Tag from "./Tag";
-import { api } from "@/utils/api";
-import type { postType, commentType, voteType, tagType } from "@/utils/type";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
+import Tag from "./Tag";
+import { api } from "@/utils/api";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+import type { postType, commentType, voteType, tagType } from "@/utils/type";
 
 interface Props {
     post: postType;
@@ -20,7 +20,7 @@ const Post: React.FC<Props> = ({ post }) => {
     const [userVote, setUserVote] = useState<voteType>();
     const [commentsNbr, setCommentsNbr] = useState<number>(0);
     const [tags, setTags] = useState<tagType[]>([]);
-    const [voteStatus, setVoteStatus] = useState<string>(""); // none vote by default
+    const [voteStatus, setVoteStatus] = useState<string>(""); 
     const [upvotes, setUpvotes] = useState(0);
     const [downvotes, setDownvotes] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const Post: React.FC<Props> = ({ post }) => {
     const fetchAuthor = useCallback(async () => {
         try {
             const authorData = await api.get(`users/${post.author}/`).json<{ nickname: string; email: string }>();
-            setauthor(authorData);
+            setAuthor(authorData);
         } catch (error) {
             console.error("Failed to fetch author:", error);
         }
@@ -46,8 +46,8 @@ const Post: React.FC<Props> = ({ post }) => {
 
     const fetchCommentsNbr = useCallback(async () => {
         try {
-            const commentsNbr = await api.get(`posts/${post.id}/comments_number/`).json<{totalComments: number}>();
-            setCommentsNbr(commentsNbr.totalComments);
+            const commentsData = await api.get(`posts/${post.id}/comments_number/`).json<{ totalComments: number }>();
+            setCommentsNbr(commentsData.totalComments);
         } catch (error) {
             console.error("Failed to fetch comments:", error);
         }
@@ -80,19 +80,17 @@ const Post: React.FC<Props> = ({ post }) => {
                     json: { author: user?.id, post: post.id, type: voteType },
                 });
             } else if (userVote.type === voteType) {
-                await api.delete(`unvote/${userVote.id}/`)
-                         .then(() => {;
-                            setUserVote(undefined);
-                            setVoteStatus(voteType);
-                         })
+                await api.delete(`unvote/${userVote.id}/`);
+                setUserVote(null);
+                setVoteStatus("");
             } else {
                 await api.put(`update-vote/${userVote.id}/`, {
-                    json: { ...userVote, type: voteType  },
+                    json: { ...userVote, type: voteType },
                 });
                 setVoteStatus(voteType);
             }
-            fetchUserVote();
-            fetchVotes();
+            await fetchUserVote();
+            await fetchVotes();
         } catch (error) {
             console.error("Failed to handle vote:", error);
         }
@@ -126,8 +124,8 @@ const Post: React.FC<Props> = ({ post }) => {
                 <div className="flex-grow">
                     <p className="mb-4">{post.details}</p>
                     <div className="flex flex-wrap gap-2">
-                        {tags.map((tag, index) => (
-                            <Tag name={tag.name} description={tag.description} key={index} />
+                        {tags.map((tag) => (
+                            <Tag name={tag.name} description={tag.description} key={tag.name} />
                         ))}
                     </div>
                 </div>
@@ -136,7 +134,7 @@ const Post: React.FC<Props> = ({ post }) => {
                         <button
                             onClick={() => handleVote("upvote")}
                             className="flex items-center bg-green-600 hover:bg-green-700 rounded-full p-2 transition-colors"
-                            disabled={loading}
+                            disabled={loading && voteStatus === 'upvote'}
                         >
                             {loading && voteStatus === 'upvote' ? (
                                 <FaSpinner className="animate-spin" size={20} />
@@ -148,7 +146,7 @@ const Post: React.FC<Props> = ({ post }) => {
                         <button
                             onClick={() => handleVote("downvote")}
                             className="flex items-center bg-red-600 hover:bg-red-700 rounded-full p-2 ml-2 transition-colors"
-                            disabled={loading}
+                            disabled={loading && voteStatus === 'downvote'}
                         >
                             {loading && voteStatus === 'downvote' ? (
                                 <FaSpinner className="animate-spin" size={20} />

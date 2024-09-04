@@ -41,3 +41,8 @@ export interface ProfileType {
     updated: string,
 
 }
+
+export interface categoryType {
+    name: string;
+    description: string;
+}
