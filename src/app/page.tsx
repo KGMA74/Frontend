@@ -12,6 +12,7 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+
     const getPost = async () => {
         setLoading(true);  // Remettre le statut de chargement à true
         setError(null);    // Réinitialiser les erreurs
@@ -34,7 +35,7 @@ const Home = () => {
     };
 
     if (loading) {
-        return <div>Chargement...</div>;
+        return <div className="h-full w-full flex justify-center items-center">Chargement...</div>;
     }
 
     if (error) {
@@ -49,7 +50,8 @@ const Home = () => {
     }
 
     return (
-        <RequireAuth>
+        <RequireAuth >
+            
             <main className="w-full h-full grid grid-cols-6 gap-x-2 mt-2 py-5">
                 <div className="Subject col-span-1">
                     <hr />

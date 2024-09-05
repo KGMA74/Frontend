@@ -42,7 +42,7 @@ const Post: React.FC<Props> = ({ post }) => {
         } catch (error) {
             console.error("Failed to fetch user vote:", error);
         }
-    }, [post.id]);
+    }, [user?.id, post.id]);
 
     const fetchCommentsNbr = useCallback(async () => {
         try {
