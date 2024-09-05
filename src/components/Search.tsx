@@ -32,4 +32,18 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default Search;
