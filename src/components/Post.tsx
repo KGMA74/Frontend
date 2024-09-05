@@ -92,8 +92,10 @@ const Post: React.FC<Props> = ({ post }) => {
         try {
             if (!userVote) {
                 await api.post(`vote/`, {
-                    json: { author: post.author, post: post.id, type: voteType },
+                    json: { author: user?.id, post: post.id, type: voteType },
+                
                 });
+                console.log(user?.id,'*******************************')
             } else if (userVote.type === voteType) {
                 await api.delete(`unvote/${userVote.id}/`);
                 setUserVote(null);
