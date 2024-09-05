@@ -22,7 +22,7 @@ const BaseQueryWithReauth: BaseQueryFn<
     // wait until the mutex is availble without locking it
     await mutex.waitForUnlock();
     let result = await BaseQuery(args, api, extraOptions);
-    if (result.error && result.error.status === 401) {
+    if (result.error && (result.error.status === 401 || result.error.status === 400)) {
         // checking whether the mutex is locked
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();

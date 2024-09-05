@@ -5,8 +5,7 @@ export interface InputProps {
   className?: string;
   value?: string;
   name: string;
-  label?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string
 }
 
 const Input: React.FC<InputProps> = ({
@@ -14,31 +13,25 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   required,
   className,
-  value,
   name,
-  label,
-  onChange,
+  label
 }) => {
   return (
-    <div className={`py-3 ${className}`}>
-      {label && (
-        <label
-          htmlFor={name}
-          className="block text-lg font-medium text-gray-300"
-        >
-          {label}
-        </label>
-      )}
+    <div className="py-3">
+      {label &&
+        <div className="flex opacity-100 group-hover:text-yellow-500 transition-opacity relative top-3 left-3">
+            <label htmlFor={name} className="px-2 bg-gray-800 text-xl text-red-500">{label}</label>
+        
+        </div>
+      }
 
       <input
         name={name}
         type={type}
         required={required}
         placeholder={placeholder}
-        value={value}
         id={name}
-        onChange={onChange}
-        className="mt-1 bg-transparent py-2 px-4 xl:px-8 rounded-3xl focus:ring-2 focus:border-transparent ring-red-500 border text-white w-full"
+        className="bg-transparent py-2 px-5 xl:px-10 rounded-3xl focus:ring-2 focus:border-transparent ring-red-500 border text-white"
       />
     </div>
   );

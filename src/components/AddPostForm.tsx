@@ -172,7 +172,7 @@ const AddPostForm: React.FC<AddPostFormProps> = ({ onPostAdded }) => {
                                 <option key={tag.id} value={tag.id}>{tag.name}</option>
                             ))}
                         </select>
-                        <p className="text-xs text-gray-500 mt-1">Ajoutez jusqu'à 5 tags pour décrire de quoi parle votre question.</p>
+                        <p className="text-xs text-gray-500 mt-1">Ajoutez jusqu&apos; à 5 tags pour décrire de quoi parle votre question.</p>
                     </div>
 
                     {/* Affichage des tags sélectionnés */}
