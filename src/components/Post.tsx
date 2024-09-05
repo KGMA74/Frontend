@@ -106,8 +106,8 @@ const Post: React.FC<Props> = ({ post }) => {
     }, [fetchAuthor, fetchCommentsNbr, fetchUserVote, fetchTags, fetchVotes]);
 
     return (
-        <div className="w-11/12 h-[400px] bg-gray-800 border border-gray-700/90 rounded-2xl shadow-lg m-2 p-4 text-white">
-            <div className="h-1/6 py-4 px-3 flex items-center">
+        <div className="w-11/12 max-w-2xl mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+            <div className="flex items-center border-b border-gray-300 bg-gray-100 p-4">
                 <Link href="/" className="flex items-center">
                     <Image
                         src="/moi.png"
@@ -117,23 +117,21 @@ const Post: React.FC<Props> = ({ post }) => {
                         priority
                         className="rounded-full"
                     />
-                    <span className="ml-2 font-semibold">{author.nickname}</span>
+                    <span className="ml-2 text-lg font-semibold text-gray-800">{author.nickname}</span>
                 </Link>
             </div>
-            <div className="flex flex-col h-5/6">
-                <div className="flex-grow">
-                    <p className="mb-4">{post.details}</p>
-                    <div className="flex flex-wrap gap-2">
-                        {tags.map((tag) => (
-                            <Tag name={tag.name} description={tag.description} key={tag.name} />
-                        ))}
-                    </div>
+            <div className="p-4">
+                <p className="mb-4 text-gray-700">{post.details}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {tags.map((tag) => (
+                        <Tag name={tag.name} description={tag.description} key={tag.name} />
+                    ))}
                 </div>
-                <div className="mt-auto flex justify-between items-center">
-                    <div className="flex">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center">
                         <button
                             onClick={() => handleVote("upvote")}
-                            className="flex items-center bg-green-600 hover:bg-green-700 rounded-full p-2 transition-colors"
+                            className="flex items-center text-green-600 hover:text-green-800 transition-colors mr-4"
                             disabled={loading && voteStatus === 'upvote'}
                         >
                             {loading && voteStatus === 'upvote' ? (
@@ -145,7 +143,7 @@ const Post: React.FC<Props> = ({ post }) => {
                         </button>
                         <button
                             onClick={() => handleVote("downvote")}
-                            className="flex items-center bg-red-600 hover:bg-red-700 rounded-full p-2 ml-2 transition-colors"
+                            className="flex items-center text-red-600 hover:text-red-800 transition-colors"
                             disabled={loading && voteStatus === 'downvote'}
                         >
                             {loading && voteStatus === 'downvote' ? (
@@ -156,9 +154,9 @@ const Post: React.FC<Props> = ({ post }) => {
                             <span className="ml-2">{downvotes}</span>
                         </button>
                     </div>
-                    <div className="flex items-center bg-gray-700 p-2 rounded-full">
+                    <div className="flex items-center text-gray-600">
                         <span className="mr-2">{commentsNbr}</span>
-                        <span>comments</span>
+                        <span>Answers</span>
                     </div>
                 </div>
             </div>

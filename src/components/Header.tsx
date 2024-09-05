@@ -23,7 +23,7 @@ const Header = () => {
                 <Logo />
             </Link>
             <div className="flex-grow flex justify-center">
-                <div className="w-full max-w-xl"> {/* Ajuste la largeur maximale de la barre de recherche */}
+                <div className="w-full max-w-xl"> 
                     <Search onSearch={handleSearch} />
                 </div>
             </div>
