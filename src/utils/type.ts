@@ -1,8 +1,8 @@
 export interface postType {
     id: number,
     author: number,
-    category: number,
-    tags: number,
+    category: string,
+    tags: tagType[],
     title: string,
     details: string,
     created: string,
@@ -27,20 +27,21 @@ export interface voteType {
     updated: string,
 }
 
+
 export interface tagType {
     name: string;
-    description: string;
+    description: string ;
 }
 
 export interface ProfileType {
     id: number,
-    photo: string,
+    photo: string | null,
     reputation: number,
-    bio: string,
+    bio: string | null,
     confirmed: boolean,
     updated: string,
-
 }
+
 
 export interface categoryType {
     name: string;

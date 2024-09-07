@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import { useAppSelector } from "@/redux/hooks";
+import { api } from "@/utils/api";
 import useLogout from "@/hooks/useLogout";
 import Search from "@/components/Search"; // Assurez-vous que le chemin est correct
 
@@ -11,6 +12,10 @@ const Header = () => {
 
     const handleSearch = (query: string) => {
         // Logique de recherche ou navigation ici
+        // Exemple:
+        // router.push(`/search?query=${query}`);
+        // console.log('Recherche effectuée pour :', query);
+        api.get(`search/?q=${query}/`)
         console.log('Recherche effectuée pour :', query);
     };
 

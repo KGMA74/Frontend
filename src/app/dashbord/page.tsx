@@ -6,7 +6,7 @@ import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 
 const Page = () => {
     const { isAuthenticated } = useAppSelector(state => state.auth)
-    const [retrieveUser, {isLoading}] = useRetrieveUserQuery();
+    //const [retrieveUser, {isLoading}] = useRetrieveUserQuery();
     
     const router = useRouter()
     return (
