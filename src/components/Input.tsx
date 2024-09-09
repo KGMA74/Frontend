@@ -31,7 +31,7 @@ const Input: React.FC<InputProps> = ({
         required={required}
         placeholder={placeholder}
         id={name}
-        className="bg-transparent py-2 px-5 xl:px-10 rounded-3xl focus:ring-2 focus:border-transparent ring-red-500 border text-white"
+        className="bg-transparent py-2 px-5 xl:px-10 rounded-3xl focus:ring-2 focus:border-transparent ring-red-500 border text-black"
       />
     </div>
   );

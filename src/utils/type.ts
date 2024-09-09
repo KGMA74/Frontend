@@ -1,3 +1,5 @@
+import type { User } from "@/redux/features/authApiSlice";
+
 export interface postType {
     id: number,
     author: number,
@@ -46,4 +48,24 @@ export interface ProfileType {
 export interface categoryType {
     name: string;
     description: string;
+}
+
+export interface userType {
+    id: number;
+    nickname: string;
+    email: string;
+}
+
+export interface conversationtype {
+    id: string;
+    users: userType[];
+}
+
+export interface messageType {
+    id: string;
+    name: string;
+    body: string;
+    conversationId: string;
+    sent_to: User;
+    author: User;
 }

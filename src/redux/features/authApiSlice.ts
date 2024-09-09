@@ -1,6 +1,6 @@
 import { apiSlice } from "../services/apiSlice";
 
-interface User {
+export interface User {
     id: number;
     nickname: string;
     email: string;

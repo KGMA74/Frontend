@@ -1,5 +1,5 @@
 import React from 'react';
-import ScreenIndicator from '@/utils/ScreenIndicator';
+import ScreenIndicator from '@/components/utils/ScreenIndicator';
 
 const Footer = () => {
   return (
