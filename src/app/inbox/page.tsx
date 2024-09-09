@@ -15,7 +15,7 @@ const InboxPage =  () => {
 
     useEffect(() => {    
         getConversations();
-    }, [conversations])
+    }, [])
     
     if(!user){
         return (
