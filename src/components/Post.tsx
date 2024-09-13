@@ -7,7 +7,7 @@ import Tag from "./Tag";
 import { api } from "@/utils/api";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import type { postType, voteType, tagType } from "@/utils/type";
-import { profile } from "console";
+
 
 // Define types
 interface AuthorType {

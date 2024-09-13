@@ -6,12 +6,10 @@ import { api } from '@/utils/api';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 interface Category {
-    id: number;
     name: string;
 }
 
 interface Tag {
-    id: number;
     name: string;
 }
 
@@ -55,6 +53,7 @@ const AddPostForm: React.FC<AddPostFormProps> = ({ onPostAdded }) => {
         setError(null);
 
         try {
+            console.log('---------------------', category)
             await api.post('posts/create/', {
                 json: { 
                     author: user?.id, 
@@ -124,7 +123,7 @@ const AddPostForm: React.FC<AddPostFormProps> = ({ onPostAdded }) => {
                         >
                             <option value="">Sélectionnez une catégorie</option>
                             {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                <option key={cat.name} value={cat.name}>{cat.name}</option>
                             ))}
                         </select>
                     </div>
@@ -169,7 +168,7 @@ const AddPostForm: React.FC<AddPostFormProps> = ({ onPostAdded }) => {
                             className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                             {availableTags.map(tag => (
-                                <option key={tag.id} value={tag.id}>{tag.name}</option>
+                                <option key={tag.name} value={tag.name}>{tag.name}</option>
                             ))}
                         </select>
                         <p className="text-xs text-gray-500 mt-1">Ajoutez jusqu&apos; à 5 tags pour décrire de quoi parle votre question.</p>
@@ -180,10 +179,10 @@ const AddPostForm: React.FC<AddPostFormProps> = ({ onPostAdded }) => {
                         <div className="mt-4">
                             <h3 className="text-sm font-medium text-gray-700">Tags sélectionnés :</h3>
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {tags.map(tagId => {
-                                    const tag = availableTags.find(tag => tag.id === Number(tagId));
+                                {tags.map(name => {
+                                    const tag = availableTags.find(tag => tag.name === name);
                                     return tag ? (
-                                        <span key={tag.id} className="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-md">
+                                        <span key={tag.name} className="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-md">
                                             {tag.name}
                                         </span>
                                     ) : null;
