@@ -18,7 +18,7 @@ interface Props {
 const Post: React.FC<Props> = ({ post }) => {
     const { data: user } = useRetrieveUserQuery();
     const [userVote, setUserVote] = useState<voteType | null>(null);
-    const [comments, setComments] = useState<Array<any>>([]);
+    const [comments, setComments] = useState<postType[]>([]);
     const [commentsNbr, setCommentsNbr] = useState<number>(0);
     const [voteStatus, setVoteStatus] = useState<string>("");
     const [upvotes, setUpvotes] = useState(0);
@@ -41,7 +41,7 @@ const Post: React.FC<Props> = ({ post }) => {
         try {
             const commentsData = await api
                 .get(`posts/${post.id}/comments/`)
-                .json<Array<any>>();
+                .json<postType[]>();
             setComments(commentsData.slice(0, 2)); // Limite à deux commentaires
         } catch (error) {
             console.error("Failed to fetch comments:", error);

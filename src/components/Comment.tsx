@@ -2,18 +2,10 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { postType } from '@/utils/type';
 
 interface CommentProps {
-    comment: {
-        id: number;
-        author: {
-            id: number;
-            photo: string;
-            nickname: string;
-        };
-        content: string;
-        created: string;
-    };
+    comment: postType;
 }
 
 const Comment: React.FC<CommentProps> = ({ comment }) => {
@@ -29,8 +21,8 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
                 />
             </div>
             <div>
-                <p className="text-sm font-semibold text-gray-800">{comment.author.nickname}</p>
-                <p className="text-sm text-gray-600">{comment.content}</p>
+                <p className="text-sm font-semibold text-gray-800">{comment.author.user.nickname}</p>
+                <p className="text-sm text-gray-600">{comment.details}</p>
                 <p className="text-xs text-gray-400 mt-1">{new Date(comment.created).toLocaleDateString()}</p>
             </div>
         </div>
