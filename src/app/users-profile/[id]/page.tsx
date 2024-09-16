@@ -90,7 +90,7 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
                     <div className="space-y-4">
                         {/* Add real education data here */}
                         <div className="bg-gray-100 p-4 rounded-lg">
-                            <h3 className="text-xl font-semibold">Bachelor's in Computer Science</h3>
+                            <h3 className="text-xl font-semibold">Bachelor&apos;s in Computer Science</h3>
                             <p className="text-gray-600">University of Example - Graduated 2020</p>
                         </div>
                     </div>
