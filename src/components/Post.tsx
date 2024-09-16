@@ -145,7 +145,7 @@ const Post: React.FC<Props> = ({ post }) => {
             {/* Post Content */}
             <div className="p-6">
                 <Link
-                    href={`/posts/${post.id}`}
+                    href={`/post/${post.id}`}
                     className="block text-2xl font-semibold text-gray-900 mb-4 leading-relaxed"
                     style={{ 
                         minHeight: '150px', 
@@ -202,7 +202,7 @@ const Post: React.FC<Props> = ({ post }) => {
                         </button>
                         <span className="text-sm">{downvotes}</span>
                         <Link
-                            href={`/posts/${post.id}`}
+                            href={`/post/${post.id}`}
                             className="text-gray-500 hover:text-gray-700 flex items-center space-x-2"
                         >
                             <FaRegComment size={20} />
