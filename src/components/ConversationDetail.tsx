@@ -45,7 +45,7 @@ const ConversationDetail: React.FC<props> = ({
             setMessages((messages) => [...messages, message])
         }
         scrollToBottom()
-    }, [lastJsonMessage])
+    }, [lastJsonMessage, conversation, me, otherUser])
 
     const sendMessage = async () => {
         console.log('Sending message')

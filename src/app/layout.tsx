@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Inter } from "next/font/google";
+//import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -16,7 +16,7 @@ import {
 } from "@heroicons/react/solid"; // Heroicons import
 import Link from "next/link"; // Importer Link pour la navigation
 
-const inter = Inter({ subsets: ["latin"] });
+//const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
     children,
@@ -30,7 +30,7 @@ export default function RootLayout({
         <Provider>
             <html lang="en">
                 <body
-                    className={`${inter.className} min-h-screen flex flex-col`}
+                    className={`${'inter.className'} min-h-screen flex flex-col`}
                 >
                     <Setup />
 

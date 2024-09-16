@@ -24,7 +24,7 @@ const useVerify = () => {
 			.finally(() => {
 				dispatch(finishInitialLoad());
 			});
-	}, []);
+	}, [dispatch, verify]);
 }
 
 export default useVerify;

@@ -52,7 +52,6 @@ const UserProfile: React.FC = () => {
             <p>Email: {user.email}</p>
             <p>Bio: {user.profile.bio}</p>
             <p>Reputation: {user.profile.reputation}</p>
-            {user.profile.photo && <img src={user.profile.photo} alt="Profile" />} {/* Affiche la photo si disponible */}
         </div>
     );
 };
