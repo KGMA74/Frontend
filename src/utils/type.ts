@@ -4,6 +4,7 @@ export interface postType {
     id: number,
     author: ProfileType,
     category: string,
+    parent_post:number,
     tags: tagType[],
     title: string,
     details: string,
@@ -11,14 +12,6 @@ export interface postType {
     updated: string,
 };
 
-export interface commentType {
-    id: number,
-    post: number,
-    author: number,
-    content: string,
-    created: string, 
-    updated: string,
-};
 
 export interface voteType {
     id: number,

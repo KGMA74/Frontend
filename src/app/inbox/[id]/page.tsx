@@ -24,7 +24,7 @@ const ConversationPage = ({ params }: { params: {id: string }}) => {
 
     if(!user){
         return (
-            <p>doit etre auyhemtifie</p>
+            <p>doit etre authentifier</p>
         );
     }
 
