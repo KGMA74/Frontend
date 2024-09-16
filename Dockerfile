@@ -15,4 +15,4 @@ RUN rm -rf src .dockerignore Dockerfile
 EXPOSE 3000
 
 # Commande pour démarrer l'application
-CMD [ "npm", "start" ]
+CMD [ "npm", "start", "--", "-H", "0.0.0.0"]
