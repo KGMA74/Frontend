@@ -10,7 +10,7 @@ import { Mutex } from "async-mutex";
 const mutex = new Mutex();
 
 const BaseQuery = fetchBaseQuery({
-    baseUrl: `http://127.0.0.1/api`,
+    baseUrl: `http://127.0.0.1:8000/api`,
     credentials: "include",
 });
 

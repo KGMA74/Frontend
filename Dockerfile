@@ -2,10 +2,6 @@ FROM node:alpine
 
 WORKDIR /Frontend
 
-
-COPY package*.json ./
-RUN npm install
-
 COPY . .
 
 # Construction de l'application

@@ -1,10 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { postType } from "@/utils/type";
 import { api } from "@/utils/api";
 import Image from "next/image";
 import Comment from "@/components/Comment";
 import AddComment from "@/components/AddComment";
+import { fetchUserProfile } from "@/utils/apiRequests";
 
 interface PostPageProps {
     params: { id: string };
@@ -15,7 +16,7 @@ const PostPage: React.FC<PostPageProps> = ({ params }) => {
     const [comments, setComments] = useState<postType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchPostAndComments = async () => {
+    const fetchPostAndComments = useCallback(async () => {
         setLoading(true);
         try {
             // Fetch the post data
@@ -30,11 +31,11 @@ const PostPage: React.FC<PostPageProps> = ({ params }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [params.id]);
 
     useEffect(() => {
         fetchPostAndComments();
-    }, [params.id]);
+    }, [fetchPostAndComments]);
 
     if (loading) return <div>Loading...</div>;
     if (!post) return <div>Post not found.</div>;

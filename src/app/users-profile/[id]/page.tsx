@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { ProfileType, postType } from "@/utils/type";
 import { api } from "@/utils/api";
 import Image from "next/image";
@@ -14,7 +14,7 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
     const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
     const [loadingComments, setLoadingComments] = useState<boolean>(true);
 
-    const getProfile = async () => {
+    const getProfile = useCallback(async () => {
         setLoadingProfile(true);
         try {
             const profileData = await api.get(`profiles/${params.id}/`).json<ProfileType>();
@@ -24,9 +24,9 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
         } finally {
             setLoadingProfile(false);
         }
-    };
+    }, [params.id]);
 
-    const getPosts = async () => {
+    const getPosts = useCallback(async () => {
         setLoadingPosts(true);
         try {
             const postsData = await api.get(`user-posts/${params.id}/`).json<postType[]>();
@@ -36,9 +36,9 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
         } finally {
             setLoadingPosts(false);
         }
-    };
+    }, [params.id]);
 
-    const getComments = async () => {
+    const getComments = useCallback(async () => {
         setLoadingComments(true);
         try {
             const commentsData = await api.get(`user-comments/${params.id}/`).json<postType[]>();
@@ -48,13 +48,13 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
         } finally {
             setLoadingComments(false);
         }
-    };
+    }, [params.id]);
 
     useEffect(() => {
         getProfile();
         getPosts();
         getComments();
-    }, [params.id]);
+    }, [getProfile, getPosts, getComments]);
 
     if (loadingProfile || loadingPosts || loadingComments) return <div>Loading...</div>;
     if (!profile) return <div>Profile not found.</div>;

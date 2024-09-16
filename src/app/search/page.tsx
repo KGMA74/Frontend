@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { api } from "@/utils/api";
 import Profile from "@/components/Profile";
@@ -12,9 +12,9 @@ type SearchResult = {
     tags: tagType[];
 };
 
-const SearchPage = () => {
+const SearchPageContent = () => {
     const searchParams = useSearchParams(); // Utiliser pour obtenir les paramètres de l'URL
-    const query = searchParams.get('query'); // Extraire le paramètre query
+    const query = searchParams.get('q'); // Extraire le paramètre query
     const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -23,7 +23,7 @@ const SearchPage = () => {
             const fetchData = async () => {
                 setLoading(true);
                 try {
-                    const response = await api.get(`/search/?q=${query}`).json<SearchResult>();
+                    const response = await api.get(`search/?q=${query}/`).json<SearchResult>();
                     setSearchResults(response);
                 } catch (error) {
                     console.error("Erreur lors de la recherche :", error);
@@ -41,12 +41,12 @@ const SearchPage = () => {
     }
 
     if (!searchResults || !query) {
-        return <p>Aucun résultat trouvé pour la recherche "{query}"</p>;
+        return <p>Aucun résultat trouvé pour la recherche &quot;{query}&quot;</p>;
     }
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-semibold mb-6">Résultats de la recherche pour : "{query}"</h1>
+            <h1 className="text-2xl font-semibold mb-6">Résultats de la recherche pour : &quot;{query}&quot;</h1>
 
             <section>
                 <h2 className="text-xl font-semibold mb-4">Profils</h2>
@@ -77,6 +77,14 @@ const SearchPage = () => {
                 </div>
             </section>
         </div>
+    );
+};
+
+const SearchPage = () => {
+    return (
+        <Suspense fallback={<div>Chargement de la page...</div>}>
+            <SearchPageContent />
+        </Suspense>
     );
 };
 

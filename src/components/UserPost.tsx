@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { api } from "@/utils/api";
 import Post from "./Post";
 import type { postType } from "@/utils/type";
@@ -12,7 +12,7 @@ const UserPosts: React.FC<UserPostsProps> = ({ params }) => {
     const [posts, setPosts] = useState<postType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchUserPosts = async () => {
+    const fetchUserPosts = useCallback(async () => {
         setLoading(true);
         try {
             const postsData = await api
@@ -24,11 +24,12 @@ const UserPosts: React.FC<UserPostsProps> = ({ params }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [params.id]);
+
 
     useEffect(() => {
         fetchUserPosts();
-    }, [params.id]);
+    }, [fetchUserPosts]);
 
     if (loading) return <div>Loading...</div>;
     if (posts.length === 0) return <div>No posts found.</div>;
