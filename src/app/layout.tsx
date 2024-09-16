@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import Provider from "@/redux/provider";
 import Setup from "@/components/utils/Setup";
 import "react-toastify/dist/ReactToastify.css";
+
 import {
     HomeIcon,
     TagIcon,
@@ -15,6 +16,7 @@ import {
     QuestionMarkCircleIcon,
 } from "@heroicons/react/solid"; // Heroicons import
 import Link from "next/link"; // Importer Link pour la navigation
+import { UserProvider } from "@/components/UserProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -117,13 +119,7 @@ export default function RootLayout({
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link
-                                                href="/users-profile"
-                                                className="flex items-center text-gray-600 hover:text-blue-600"
-                                            >
-                                                <UserIcon className="w-6 h-6 mr-2 text-gray-500" />
-                                                Profile
-                                            </Link>
+                                        <UserProvider/>
                                         </li>
                                     </ul>
                                 </nav>
@@ -135,31 +131,6 @@ export default function RootLayout({
                             {children}
                         </main>
 
-                        {/* Right sidebar */}
-                        {!isAuthPage && (
-                            <aside className="w-1/5 hidden lg:block bg-gray-50 p-4 h-screen sticky top-0 border-l">
-                                <h3 className="font-semibold text-lg mb-4">
-                                    Hot Network Questions
-                                </h3>
-                                <ul className="space-y-2">
-                                    <li className="text-sm text-gray-600 hover:text-blue-600">
-                                        <a href="#">What is Lorem Ipsum?</a>
-                                    </li>
-                                    <li className="text-sm text-gray-600 hover:text-blue-600">
-                                        <a href="#">Why do we use it?</a>
-                                    </li>
-                                    <li className="text-sm text-gray-600 hover:text-blue-600">
-                                        <a href="#">Where can I get some?</a>
-                                    </li>
-                                    <li className="text-sm text-gray-600 hover:text-blue-600">
-                                        <a href="#">
-                                            The standard Lorem Ipsum passage,
-                                            used since the 1500s
-                                        </a>
-                                    </li>
-                                </ul>
-                            </aside>
-                        )}
                     </div>
 
                     {/* Footer */}

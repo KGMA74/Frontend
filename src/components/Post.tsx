@@ -1,28 +1,15 @@
+// Post.tsx
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { FaSpinner, FaRegComment } from "react-icons/fa";
 import Tag from "./Tag";
+import AddComment from "./AddComment";
+import Comment from "./Comment";
 import { api } from "@/utils/api";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
-import type { postType, voteType, tagType } from "@/utils/type";
-
-
-// Define types
-interface AuthorType {
-    nickname: string;
-    email: string;
-}
-
-interface VotesResponse {
-    upvotes: number;
-    downvotes: number;
-}
-
-interface CommentsNumberResponse {
-    totalComments: number;
-}
+import type { postType, voteType } from "@/utils/type";
 
 interface Props {
     post: postType;
@@ -31,6 +18,7 @@ interface Props {
 const Post: React.FC<Props> = ({ post }) => {
     const { data: user } = useRetrieveUserQuery();
     const [userVote, setUserVote] = useState<voteType | null>(null);
+    const [comments, setComments] = useState<Array<any>>([]);
     const [commentsNbr, setCommentsNbr] = useState<number>(0);
     const [voteStatus, setVoteStatus] = useState<string>("");
     const [upvotes, setUpvotes] = useState(0);
@@ -48,6 +36,17 @@ const Post: React.FC<Props> = ({ post }) => {
             console.error("Failed to fetch user vote:", error);
         }
     }, [post.id, user?.id]);
+
+    const fetchComments = useCallback(async () => {
+        try {
+            const commentsData = await api
+                .get(`posts/${post.id}/comments/`)
+                .json<Array<any>>();
+            setComments(commentsData.slice(0, 2)); // Limite à deux commentaires
+        } catch (error) {
+            console.error("Failed to fetch comments:", error);
+        }
+    }, [post.id]);
 
     const fetchCommentsNbr = useCallback(async () => {
         try {
@@ -97,39 +96,46 @@ const Post: React.FC<Props> = ({ post }) => {
         setLoading(false);
     };
 
+    const handleCommentAdded = () => {
+        fetchComments();
+        fetchCommentsNbr();
+    };
+
     useEffect(() => {
+        fetchComments();
         fetchCommentsNbr();
         fetchUserVote();
         fetchVotes();
-    }, [fetchCommentsNbr, fetchUserVote, fetchVotes]);
+    }, [fetchComments, fetchCommentsNbr, fetchUserVote, fetchVotes]);
 
     return (
-        <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 my-6">
+        <div className="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 my-4">
             {/* Header */}
-            <div className="flex items-center p-4 bg-gray-50">
+            <div className="flex items-center p-4 bg-gray-50 border-b border-gray-200">
                 <Link
                     href={`/users-profile/${post.author.user.id}`}
                     className="flex items-center"
                 >
-                    <div className={`w-[50px] h-[50px] flex rounded-full overflow-hidden ${
-                                post.author.confirmed == true &&
-                                "border border-blue-500"
-                            }`}>
+                    <div
+                        className={`w-[50px] h-[50px] rounded-full overflow-hidden border ${
+                            post.author.confirmed ? "border-blue-500" : ""
+                        }`}
+                    >
                         <Image
-                            src={post.author.photo || `/moi.png `}
+                            src={post.author.photo || `/moi.png`}
                             alt="profile"
                             width={50}
                             height={50}
                             priority
-                            className={`rounded-md shadow-lg object-fill `}
+                            className="object-cover"
                         />
                     </div>
                     <div className="ml-3">
-                        <p className="text-sm font-semibold text-gray-800">
+                        <p className="text-sm font-bold text-gray-800">
                             {post.author.user.nickname}
                         </p>
                         <p className="text-xs text-gray-500">
-                            Posted on{" "}
+                            Posté le{" "}
                             {new Date(post.created).toLocaleDateString()}
                         </p>
                     </div>
@@ -140,13 +146,20 @@ const Post: React.FC<Props> = ({ post }) => {
             <div className="p-6">
                 <Link
                     href={`/posts/${post.id}`}
-                    className="block text-gray-700 text-lg mb-6 leading-relaxed hover:underline"
+                    className="block text-2xl font-semibold text-gray-900 mb-4 leading-relaxed"
+                    style={{ 
+                        minHeight: '150px', 
+                        display: '-webkit-box', 
+                        WebkitBoxOrient: 'vertical', 
+                        overflow: 'hidden', 
+                        WebkitLineClamp: 6 
+                    }} // Limite à 6 lignes
                 >
-                    {post.details}
+                    {post.title}
                 </Link>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-3 mb-6">
+                <div className="flex flex-wrap gap-3 mb-4">
                     {post.tags.map((tag) => (
                         <Tag
                             key={tag.name}
@@ -158,18 +171,13 @@ const Post: React.FC<Props> = ({ post }) => {
 
                 {/* Reactions and Comments */}
                 <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-                    {/* Input field */}
                     <div className="flex-grow">
-                        <input
-                            type="text"
-                            placeholder="Add a comment..."
-                            className="border border-gray-300 rounded-lg px-4 py-2 w-full"
-                        />
+                        <AddComment postId={post.id} onCommentAdded={handleCommentAdded} />
                     </div>
                     <div className="flex items-center space-x-4 ml-4">
                         <button
                             onClick={() => handleVote("upvote")}
-                            className={`text-blue-600 ${
+                            className={`text-blue-500 hover:text-blue-600 transition duration-150 ${
                                 voteStatus === "upvote" && "text-blue-800"
                             }`}
                         >
@@ -182,7 +190,7 @@ const Post: React.FC<Props> = ({ post }) => {
                         <span className="text-sm">{upvotes}</span>
                         <button
                             onClick={() => handleVote("downvote")}
-                            className={`text-red-600 ${
+                            className={`text-red-500 hover:text-red-600 transition duration-150 ${
                                 voteStatus === "downvote" && "text-red-800"
                             }`}
                         >
@@ -195,12 +203,19 @@ const Post: React.FC<Props> = ({ post }) => {
                         <span className="text-sm">{downvotes}</span>
                         <Link
                             href={`/posts/${post.id}`}
-                            className="text-gray-600 hover:text-gray-800 flex items-center space-x-2"
+                            className="text-gray-500 hover:text-gray-700 flex items-center space-x-2"
                         >
                             <FaRegComment size={20} />
                             <span className="text-sm">{commentsNbr}</span>
                         </Link>
                     </div>
+                </div>
+
+                {/* Display Comments */}
+                <div className="mt-6">
+                    {comments.map((comment) => (
+                        <Comment key={comment.id} comment={comment} />
+                    ))}
                 </div>
 
                 {/* Display Tags */}
