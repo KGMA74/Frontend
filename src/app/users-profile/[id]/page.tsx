@@ -1,26 +1,63 @@
 "use client";
 import { useState, useEffect } from "react";
-import type { ProfileType } from "@/utils/type";
+import type { ProfileType, postType } from "@/utils/type";
 import { api } from "@/utils/api";
 import Image from "next/image";
+import Comment from "@/components/Comment"; // Assurez-vous que ce composant existe pour afficher les commentaires
+import Post from "@/components/Post"; // Assurez-vous que ce composant existe pour afficher les posts
 
 const ProfileDetail = ({ params }: { params: { id: string } }) => {
     const [profile, setProfile] = useState<ProfileType | null>(null);
+    const [posts, setPosts] = useState<postType[]>([]);
+    const [comments, setComments] = useState<postType[]>([]);
+    const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
+    const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
+    const [loadingComments, setLoadingComments] = useState<boolean>(true);
 
     const getProfile = async () => {
-        await api.get(`profiles/${params.id}/`)
-            .json<ProfileType>()
-            .then((res) => setProfile(res))
-            .catch((error) => console.error(error));
+        setLoadingProfile(true);
+        try {
+            const profileData = await api.get(`profiles/${params.id}/`).json<ProfileType>();
+            setProfile(profileData);
+        } catch (error) {
+            console.error("Failed to fetch profile:", error);
+        } finally {
+            setLoadingProfile(false);
+        }
+    };
+
+    const getPosts = async () => {
+        setLoadingPosts(true);
+        try {
+            const postsData = await api.get(`user-posts/${params.id}/`).json<postType[]>();
+            setPosts(postsData);
+        } catch (error) {
+            console.error("Failed to fetch posts:", error);
+        } finally {
+            setLoadingPosts(false);
+        }
+    };
+
+    const getComments = async () => {
+        setLoadingComments(true);
+        try {
+            const commentsData = await api.get(`user-comments/${params.id}/`).json<postType[]>();
+            setComments(commentsData);
+        } catch (error) {
+            console.error("Failed to fetch comments:", error);
+        } finally {
+            setLoadingComments(false);
+        }
     };
 
     useEffect(() => {
         getProfile();
-    }, []);
+        getPosts();
+        getComments();
+    }, [params.id]);
 
-    if (!profile) {
-        return <div>Loading...</div>;
-    }
+    if (loadingProfile || loadingPosts || loadingComments) return <div>Loading...</div>;
+    if (!profile) return <div>Profile not found.</div>;
 
     return (
         <div className="bg-gray-100 min-h-screen p-6">
@@ -49,7 +86,6 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
                         <h2 className="text-xl font-semibold">Contact Information</h2>
                         <p className="text-gray-600">{profile.user.email}</p>
                     </div>
-                    
                 </div>
 
                 <hr className="my-6" />
@@ -95,9 +131,41 @@ const ProfileDetail = ({ params }: { params: { id: string } }) => {
                         </div>
                     </div>
                 </div>
+
+                {/* Posts Section */}
+                <div className="mb-6">
+                    <h2 className="text-2xl font-bold mb-4">Posts</h2>
+                    <div className="space-y-4">
+                        {loadingPosts ? (
+                            <p className="text-gray-600">Loading posts...</p>
+                        ) : posts.length === 0 ? (
+                            <p className="text-gray-600">No posts found.</p>
+                        ) : (
+                            posts.map((post) => (
+                                <Post key={post.id} post={post} />
+                            ))
+                        )}
+                    </div>
+                </div>
+
+                {/* Comments Section 
+                <div className="mb-6">
+                    <h2 className="text-2xl font-bold mb-4">Comments</h2>
+                    <div className="space-y-4">
+                        {loadingComments ? (
+                            <p className="text-gray-600">Loading comments...</p>
+                        ) : comments.length === 0 ? (
+                            <p className="text-gray-600">No comments found.</p>
+                        ) : (
+                            comments.map((comment) => (
+                                <Comment key={comment.id} comment={comment} />
+                            ))
+                        )}
+                    </div>
+                </div>*/}
             </div>
         </div>
     );
-}
+};
 
 export default ProfileDetail;
