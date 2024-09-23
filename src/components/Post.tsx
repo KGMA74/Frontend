@@ -146,16 +146,30 @@ const Post: React.FC<Props> = ({ post }) => {
             <div className="p-6">
                 <Link
                     href={`/post/${post.id}`}
-                    className="block text-2xl font-semibold text-gray-900 mb-4 leading-relaxed"
+                    className="block text-2xl font-semibold text-gray-900 mb-2 leading-relaxed"
+                    style={{ 
+                        minHeight: '60px', 
+                        display: '-webkit-box', 
+                        WebkitBoxOrient: 'vertical', 
+                        overflow: 'hidden', 
+                        WebkitLineClamp: 2 
+                    }} // Limite à 2 lignes
+                >
+                    {post.title}
+                </Link>
+
+                <Link
+                    href={`/post/${post.id}`}
+                    className="block text-gray-700 mb-4 leading-relaxed"
                     style={{ 
                         minHeight: '150px', 
                         display: '-webkit-box', 
                         WebkitBoxOrient: 'vertical', 
                         overflow: 'hidden', 
-                        WebkitLineClamp: 6 
-                    }} // Limite à 6 lignes
+                        WebkitLineClamp: 5 
+                    }} // Limite à 5 lignes
                 >
-                    {post.title}
+                    {post.details}
                 </Link>
 
                 {/* Tags */}

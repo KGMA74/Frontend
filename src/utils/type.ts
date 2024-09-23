@@ -35,8 +35,11 @@ export interface ProfileType {
     bio: string | null,
     confirmed: boolean,
     updated: string,
+    skills?: Skills[]
 }
-
+export interface Skills {
+    id: number; name: string
+}
 
 export interface categoryType {
     name: string;
@@ -47,7 +50,7 @@ export interface userType {
     id: number;
     nickname: string;
     email: string;
-    last_login: string;
+    last_login?: string;
 
 }
 

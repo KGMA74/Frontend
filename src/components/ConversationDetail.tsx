@@ -1,122 +1,103 @@
-import { User, useRetrieveUserQuery } from "@/redux/features/authApiSlice";
-import { conversationtype } from "@/utils/type";
-import { useEffect, useState, useRef } from "react";
-import useWebSockt, {ReadyState} from "react-use-websocket"
-import type { messageType } from "@/utils/type";
+import React, { useEffect, useState } from 'react';
+import { messageType, userType, conversationtype } from '@/utils/type';
 
-interface props{
+interface NewMessage extends Omit<messageType, 'id'> {}
+
+interface ConversationDetailProps {
     conversation: conversationtype;
     oldMessages: messageType[];
+    currentUser: userType;
+    websocket: WebSocket | null;
 }
 
-const ConversationDetail: React.FC<props> = ({
+const ConversationDetail: React.FC<ConversationDetailProps> = ({
     conversation,
-    oldMessages
+    oldMessages,
+    currentUser,
+    websocket: initialWebsocket
 }) => {
-    const {data: me } = useRetrieveUserQuery();
-    const otherUser = conversation.users?.find((user) => user.id !== me?.id);
-    const [newMessage, setnewMessage] = useState('');
-    const messageDiv = useRef<HTMLDivElement>(null);
-    const [messages, setMessages] = useState<messageType[]>([])
+    const [messages, setMessages] = useState<messageType[]>(oldMessages);
+    const [newMessage, setNewMessage] = useState('');
+    const [websocket, setWebsocket] = useState<WebSocket | null>(initialWebsocket);
+    const messageQueue: NewMessage[] = [];
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSockt(
-        `ws://127.0.0.1:8000/ws/${conversation.id}/`,
-        {
-            share: false,
-            shouldReconnect: () => true,
-        },
-    )
-    
     useEffect(() => {
-        console.log('connection state changed', readyState);
-    }, [readyState])
-    
-    useEffect(() => {
-        if(lastJsonMessage && typeof lastJsonMessage === 'object' && 'name' in lastJsonMessage && 'body' in lastJsonMessage) {
-            const message: messageType = {
-                id: '',
-                name: lastJsonMessage.name as string,
-                body: lastJsonMessage.body as string,
-                sent_to: otherUser as User,
-                author: me as User,
-                conversationId: conversation.id
+        const wsUrl = `ws://127.0.0.1:8000/ws/${conversation.id}/`;
+        const ws = new WebSocket(wsUrl);
+        setWebsocket(ws);
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onmessage = (event) => {
+            const messageData: messageType = JSON.parse(event.data);
+            setMessages((prev) => [...prev, messageData]);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [conversation.id]);
+
+    const sendMessage = () => {
+        const messageData: NewMessage = {
+            name: currentUser.nickname,
+            body: newMessage,
+            conversationId: conversation.id,
+            sent_to: (conversation.users[0] === currentUser) ? conversation.users[1] : conversation.users[0],
+            author: currentUser
+        };
+
+        if (websocket) {
+            if (websocket.readyState === WebSocket.OPEN) {
+                console.log('Sending message:', messageData);
+                websocket.send(JSON.stringify(messageData));
+                setMessages((prev) => [...prev, { ...messageData, id: 'temp-id' }]);
+                setNewMessage('');
+            } else {
+                messageQueue.push(messageData);
+                console.warn('Message queued because WebSocket is not open');
             }
-
-            setMessages((messages) => [...messages, message])
+        } else {
+            console.error('WebSocket is not initialized');
         }
-        scrollToBottom()
-    }, [lastJsonMessage, conversation, me, otherUser])
-
-    const sendMessage = async () => {
-        console.log('Sending message')
-        sendJsonMessage({
-            'type': 'chat_message',
-            data: {
-                body: newMessage,
-                name: me?.nickname,
-                sent_to_id: otherUser?.id,
-                conversation_id: conversation.id,
-            }
-        })
-        setnewMessage('');
-
-        setTimeout(() => {
-            scrollToBottom()
-        }, 50)
-    }
-
-    const scrollToBottom = () => {
-        if(messageDiv.current){
-            messageDiv.current.scrollTop = messageDiv.current.scrollHeight;
-        }
-    }
+    };
 
     return (
-
-        <>
-        <div 
-            ref={messageDiv}
-            className="max-h-[400px] overflow-auto lex flex-col space-y-4"
-        >
-            {oldMessages?.map((message, index) => (
-                <div 
-                    key={index}
-                    className={`w-[80%] py-4 px-6 rounded-xl ${message.author.id === me?.id ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}>
-
-                    <p className="font-bold text-gray-500">{message.name}</p>
-                    <p>{message.body}</p>
+        <div className="flex flex-col h-screen">
+            <div className="flex-grow overflow-y-auto p-4 ">
+                {messages.map((msg, index) => (
+                    <div key={index} className="mb-2">
+                        <div className="font-semibold">{msg.name}</div>
+                        <div className="bg-white rounded-lg p-2 shadow">{msg.body}</div>
+                    </div>
+                ))}
+            </div>
+            <div className="p-4 bg-white shadow-lg">
+                <div className="flex">
+                    <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Type your message..."
+                        className="flex-grow border border-gray-300 rounded-lg p-2"
+                    />
+                    <button onClick={sendMessage} className="ml-2 bg-blue-500 text-white rounded-lg px-4">
+                        Send
+                    </button>
                 </div>
-            ))}
-
-            {messages?.map((message, index) => (
-                <div 
-                    key={index}
-                    className={`w-[80%] py-4 px-6 rounded-xl ${message.name === me?.nickname ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}>
-
-                    <p className="font-bold text-gray-500">{message.name}</p>
-                    <p>{message.body}</p>
-                </div>
-            ))}
-
+            </div>
         </div>
-
-        <div className="">
-            <input 
-                type="text" 
-                placeholder="Type your message..."
-                className=""
-                value={newMessage}
-                onChange={(e) => setnewMessage(e.target.value)}
-            />
-
-            <button 
-                onClick={sendMessage}
-            >
-                send
-            </button>
-        </div>
-        </>
     );
-}
+};
 
 export default ConversationDetail;

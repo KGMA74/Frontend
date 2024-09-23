@@ -14,16 +14,16 @@ type SearchResult = {
 
 const SearchPage = () => {
     const searchParams = useSearchParams(); // Utiliser pour obtenir les paramètres de l'URL
-    const query = searchParams.get('query'); // Extraire le paramètre query
+    const query = searchParams.get('q'); // Extraire le paramètre query
     const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-
+    
     useEffect(() => {
         if (query) {
             const fetchData = async () => {
                 setLoading(true);
                 try {
-                    const response = await api.get(`/search/?q=${query}`).json<SearchResult>();
+                    const response = await api.get(`search/?q=${query}`).json<SearchResult>();
                     setSearchResults(response);
                 } catch (error) {
                     console.error("Erreur lors de la recherche :", error);
@@ -40,7 +40,7 @@ const SearchPage = () => {
         return <p>Recherche en cours...</p>;
     }
 
-    if (!searchResults || !query) {
+    if (!searchResults) {
         return <p>Aucun résultat trouvé pour la recherche "{query}"</p>;
     }
 
@@ -51,29 +51,41 @@ const SearchPage = () => {
             <section>
                 <h2 className="text-xl font-semibold mb-4">Profils</h2>
                 <div className="grid grid-cols-1 gap-4">
-                    {searchResults.profiles.map(profile => (
-                        <Profile key={profile.user.id} profile={profile} />
-                    ))}
+                    {searchResults.profiles.length > 0 ? (
+                        searchResults.profiles.map(profile => (
+                            <Profile key={profile.user.id} profile={profile} />
+                        ))
+                    ) : (
+                        <p>Aucun profil trouvé.</p>
+                    )}
                 </div>
             </section>
 
             <section className="mt-8">
                 <h2 className="text-xl font-semibold mb-4">Posts</h2>
                 <div className="grid grid-cols-1 gap-4">
-                    {searchResults.posts.map(post => (
-                        <Post key={post.id} post={post} />
-                    ))}
+                    {searchResults.posts.length > 0 ? (
+                        searchResults.posts.map(post => (
+                            <Post key={post.id} post={post} />
+                        ))
+                    ) : (
+                        <p>Aucun post trouvé.</p>
+                    )}
                 </div>
             </section>
 
             <section className="mt-8">
                 <h2 className="text-xl font-semibold mb-4">Tags</h2>
                 <div className="grid grid-cols-1 gap-4">
-                    {searchResults.tags.map(tag => (
-                        <div key={tag.name} className="p-2 border rounded-lg">
-                            {tag.name}
-                        </div>
-                    ))}
+                    {searchResults.tags.length > 0 ? (
+                        searchResults.tags.map(tag => (
+                            <div key={tag.name} className="p-2 border rounded-lg">
+                                {tag.name}
+                            </div>
+                        ))
+                    ) : (
+                        <p>Aucun tag trouvé.</p>
+                    )}
                 </div>
             </section>
         </div>

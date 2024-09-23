@@ -7,7 +7,7 @@ interface props {
     conversation: conversationtype;
 }
 
-const  Conversation: React.FC<props> = ({
+const Conversation: React.FC<props> = ({
     userId,
     conversation
 }) => {
@@ -16,17 +16,12 @@ const  Conversation: React.FC<props> = ({
     const otherUser = conversation.users.find((user) => user.id !== userId);
     
     return (
-        <div className="px-6 py-4 cursor-pointer border border-gray-300 rounded-xl">
+        <div onClick={() => router.push(`/inbox/${conversation.id}`)} className=" cursor-pointer border border-gray-300 rounded-xl">
             <p className="m-6 text-xl">{otherUser?.nickname}</p>
             
-            <p 
-                onClick={() => router.push(`/inbox/${conversation.id}`)}
-                className="text-black"
-            >
-                Go to conversation
-            </p>
+            
         </div>
-    )
+    );
 }
 
 export default Conversation;
