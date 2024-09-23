@@ -20,7 +20,7 @@ const Input: React.FC<InputProps> = ({
     <div className="py-3">
       {label &&
         <div className="flex opacity-100 group-hover:text-yellow-500 transition-opacity relative top-3 left-3">
-            <label htmlFor={name} className="px-2 bg-gray-800 text-xl text-red-500">{label}</label>
+            <label htmlFor={name} className="px-2 bg-white text-xl text-blue-500">{label}</label>
         
         </div>
       }
@@ -31,7 +31,7 @@ const Input: React.FC<InputProps> = ({
         required={required}
         placeholder={placeholder}
         id={name}
-        className="bg-transparent py-2 px-5 xl:px-10 rounded-3xl focus:ring-2 focus:border-transparent ring-red-500 border text-black"
+        className="bg-transparent py-2 px-5 xl:px-10 rounded-3xl focus:ring-2 focus:border-transparent ring-blue-500 border text-black"
       />
     </div>
   );

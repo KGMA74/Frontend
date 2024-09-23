@@ -20,7 +20,7 @@ const ConversationDetail: React.FC<props> = ({
     const [messages, setMessages] = useState<messageType[]>([])
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSockt(
-        `ws://127.0.0.1:8000/ws/${conversation.id}/`,
+        `https://${process.env.NEXT_PUBLIC_DOMAIN}/test/ws/${conversation.id}/`,
         {
             share: false,
             shouldReconnect: () => true,

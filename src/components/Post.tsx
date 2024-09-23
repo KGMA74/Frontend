@@ -158,6 +158,8 @@ const Post: React.FC<Props> = ({ post }) => {
                     {post.title}
                 </Link>
 
+                <p className="">{post.details}</p>
+
                 {/* Tags */}
                 <div className="flex flex-wrap gap-3 mb-4">
                     {post.tags.map((tag) => (

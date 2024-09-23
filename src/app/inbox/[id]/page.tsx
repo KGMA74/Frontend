@@ -2,13 +2,13 @@
 
 import ConversationDetail from "@/components/ConversationDetail";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+import RequireAuth from "@/components/utils/RequireAuth";
 import type { conversationtype } from "@/utils/type";
 import { api } from "@/utils/api";
 import { useState, useEffect, useCallback } from "react";
 import type { messageType } from "@/utils/type";
 
 const ConversationPage = ({ params }: { params: {id: string }}) => {
-    const { data: user } = useRetrieveUserQuery();
     const [conversation, setConversation] = useState<conversationtype>()
     const [oldMessages, setOldMessages] = useState<messageType[]>([])
 
@@ -22,21 +22,18 @@ const ConversationPage = ({ params }: { params: {id: string }}) => {
         getConversation();
     }, [getConversation])
 
-    if(!user){
-        return (
-            <p>doit etre authentifier</p>
-        );
-    }
 
     if(!conversation) return null;
 
     return (
-        <main className=''>
-            <ConversationDetail
-                conversation={conversation}
-                oldMessages={oldMessages}
-            />
-        </main>
+        <RequireAuth>
+            <main className=''>
+                <ConversationDetail
+                    conversation={conversation}
+                    oldMessages={oldMessages}
+                />
+            </main>
+        </RequireAuth>
     )
 }
 

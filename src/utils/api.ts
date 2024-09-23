@@ -1,21 +1,16 @@
 import ky from 'ky';
 
-const API_URL = 'http://127.0.0.1/api';
-//const API_URL = "http://192.168.31.253:8000/api";
-
-
-
 export const api = ky.extend({
-    prefixUrl: API_URL, //process.env.API_URL; 
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
     credentials: 'include', 
     hooks: {
         afterResponse: [
             async (request, options, response) => {
                 if (response.status === 401) {
                     try {
-                        await ky.post(`${API_URL}/jwt/refresh/`, {credentials: 'include'})
+                        await api(`jwt/refresh/`)
 
-                        const relativeUrl = request.url.replace(API_URL+'/', '');
+                        const relativeUrl = request.url.replace(process.env.NEXT_PUBLIC_API_URL+'/', '');
 
                         // Réessaie la requête originale avec le nouveau token
                         const retryResponse = await api(relativeUrl, {

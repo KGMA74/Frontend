@@ -40,7 +40,7 @@ const RegisterForm: React.FC<props> = ({submitHandler, AlreadySigned}) => {
     return (
         <form
         onSubmit={submitHandler}
-        className="min-h-[75vh] w-[80%] md:w-1/2 xl:w-[40%] flex flex-col justify-center items-center border border-gray-500/20 p-3 rounded-lg shadow-2xl bg-transparent backdrop-blur-lg"
+        className="min-h-[75vh] w-[80%] md:w-1/2 xl:w-[40%] bg-transparent flex flex-col justify-center items-center rounded-lg border-gray-500/20 p-3 sm:border sm:shadow-2xl sm:backdrop-blur-lg"
       >
         {registerFields.map((field, index) => (
           <Input 
@@ -55,7 +55,7 @@ const RegisterForm: React.FC<props> = ({submitHandler, AlreadySigned}) => {
 
         <button
           type="submit"
-          className="m-2 bg-red-400 py-2 px-4 rounded-full"
+          className="m-2 bg-blue-400 py-2 px-4 rounded-full"
         >
           Submit
         </button>

@@ -4,6 +4,7 @@ import Conversation from "@/components/Conversation";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import { api } from "@/utils/api";
 import { useState, useEffect } from "react";
+import RequireAuth from "@/components/utils/RequireAuth";
 
 const InboxPage =  () => {
     const {data: user} = useRetrieveUserQuery();
@@ -17,24 +18,19 @@ const InboxPage =  () => {
         getConversations();
     }, [])
     
-    if(!user){
-        return (
-            <p>doit etre authentifieeeee</p>
-        )
-    }
-    
     return (
-        <div className="max-w-[1500px] mx-auto px-6 pb-6 space-y-4">
-            <h1 className="my-6 text-2xl">Inbox</h1>
+        <RequireAuth>
+            <div className="max-w-[1500px] mx-auto px-6 pb-6 space-y-4">
+                <h1 className="my-6 text-2xl">Inbox</h1>
 
-            {conversations?.map((conversation) => (
-                <Conversation
-                    key={conversation.id}
-                    userId={user.id}
-                    conversation={conversation}
-                />
-            ))}
-        </div>
+                {conversations?.map((conversation) => (
+                    <Conversation
+                        key={conversation.id}
+                        conversation={conversation}
+                    />
+                ))}
+            </div>
+        </RequireAuth>
     );
 }
 

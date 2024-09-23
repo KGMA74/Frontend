@@ -20,16 +20,11 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }, [isLoading, isAuthenticated, router]);
 
 
-    if (isAuthenticated) {
-        if(!isRefresh) {
-            setRefresh(true);
-            console.log('---------------', isRefresh)
-            //window.location.reload();
-        }
-        return <>{children}</>;
+    if (!isAuthenticated) {
+        <div className=""><p className="">You must be authenticated</p></div>
     }
 
-    return null;
+    return <>{children}</>;
 };
 
 export default RequireAuth;

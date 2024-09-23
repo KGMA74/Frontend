@@ -1,19 +1,18 @@
 'use client';
 import { useRouter } from "next/navigation";
 import type { conversationtype } from "@/utils/type";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 
 interface props {
-    userId: number;
     conversation: conversationtype;
 }
 
 const  Conversation: React.FC<props> = ({
-    userId,
     conversation
 }) => {
-
+    const { data: me } = useRetrieveUserQuery();
     const router = useRouter();
-    const otherUser = conversation.users.find((user) => user.id !== userId);
+    const otherUser = conversation.users.find((user) => user.id !== me?.id);
     
     return (
         <div className="px-6 py-4 cursor-pointer border border-gray-300 rounded-xl">
