@@ -15,6 +15,7 @@ const Header = () => {
     const handleSearch = (query: string) => {
         // Rediriger vers la page de recherche avec le paramètre de requête
         router.push(`/search?q=${query}`);
+        router.push(`search?q=${query}`);
     };
 
     return (

@@ -1,7 +1,6 @@
 'use client';
 
 import ConversationDetail from "@/components/ConversationDetail";
-import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import RequireAuth from "@/components/utils/RequireAuth";
 import type { conversationtype } from "@/utils/type";
 import { api } from "@/utils/api";
@@ -27,14 +26,18 @@ const ConversationPage = ({ params }: { params: {id: string }}) => {
 
     return (
         <RequireAuth>
+
             <main className=''>
+                
                 <ConversationDetail
                     conversation={conversation}
                     oldMessages={oldMessages}
                 />
+
             </main>
         </RequireAuth>
     )
 }
+
 
 export default ConversationPage;

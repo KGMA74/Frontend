@@ -1,5 +1,7 @@
 import { User, useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import { conversationtype } from "@/utils/type";
+import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import useWebSockt, {ReadyState} from "react-use-websocket"
 import type { messageType } from "@/utils/type";
@@ -18,6 +20,7 @@ const ConversationDetail: React.FC<props> = ({
     const [newMessage, setnewMessage] = useState('');
     const messageDiv = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<messageType[]>([])
+    const router = useRouter();
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSockt(
         `https://${process.env.NEXT_PUBLIC_DOMAIN}/test/ws/${conversation.id}/`,
@@ -73,48 +76,62 @@ const ConversationDetail: React.FC<props> = ({
 
     return (
 
-        <>
-        <div 
-            ref={messageDiv}
-            className="max-h-[400px] overflow-auto lex flex-col space-y-4"
-        >
-            {oldMessages?.map((message, index) => (
-                <div 
-                    key={index}
-                    className={`w-[80%] py-4 px-6 rounded-xl ${message.author.id === me?.id ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}>
+        <>  
+            <div className="bg-white p-4 shadow">
+                    <h1 className="text-xl font-bold">Conversation avec {otherUser?.nickname}</h1>
+                    <button 
+                        onClick={async () => {
+                            if (confirm("Êtes-vous sûr de vouloir supprimer cette conversation ?")) {
+                                await api.delete(`chat/${conversation.id}/delete/`)
+                                            .then(() => router.push('/inbox'));
+                            }
+                        }} 
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition mt-2"
+                    >
+                        Supprimer la conversation
+                    </button>
+            </div>
 
-                    <p className="font-bold text-gray-500">{message.name}</p>
-                    <p>{message.body}</p>
-                </div>
-            ))}
-
-            {messages?.map((message, index) => (
-                <div 
-                    key={index}
-                    className={`w-[80%] py-4 px-6 rounded-xl ${message.name === me?.nickname ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}>
-
-                    <p className="font-bold text-gray-500">{message.name}</p>
-                    <p>{message.body}</p>
-                </div>
-            ))}
-
-        </div>
-
-        <div className="">
-            <input 
-                type="text" 
-                placeholder="Type your message..."
-                className=""
-                value={newMessage}
-                onChange={(e) => setnewMessage(e.target.value)}
-            />
-
-            <button 
-                onClick={sendMessage}
+            <div 
+                ref={messageDiv}
+                className="h-screen overflow-auto flex flex-col space-y-4"
             >
-                send
-            </button>
-        </div>
+                {oldMessages?.map((message, index) => (
+                    <div
+                        key={index}
+                        className={`flex-grow overflow-y-auto w-[80%] p-4 rounded-xl ${message.author.id === me?.id ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}>
+
+                        <div className="font-semibold">{message.name}</div>
+                        <div className="bg-white rounded-lg p-2 shadow">{message.body}</div>
+                    </div>
+                ))}
+
+                {messages?.map((message, index) => (
+                    <div 
+                        key={index}
+                        className={` overflow-y-auto w-[80%] p-4 rounded-xl ${message.name === me?.nickname ? 'ml-[20%] bg-blue-200': 'bg-gray-200'}`}
+                    >
+                        <div className="font-semibold">{message.name}</div>
+                        <div className="bg-white rounded-lg p-2 shadow">{message.body}</div>
+                    </div>
+                ))}
+
+            </div>
+
+            <div className="p-4 bg-white shadow-lg">
+                <div className="flex">
+                    <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setnewMessage(e.target.value)}
+                        placeholder="Type your message..."
+                        className="fborder border-gray-300 rounded-lg p-2"
+                    />
+                    <button onClick={sendMessage} className="ml-2 bg-blue-500 text-white rounded-lg px-4">
+                        Send
+                    </button>
+                </div>
+            </div>
         </>
     );
 }
