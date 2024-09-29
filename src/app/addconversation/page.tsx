@@ -18,7 +18,7 @@ const AddConversationPage = () => {
     }
 
     if (error || !currentUser) {
-        return <p>Erreur lors de la récupération de l'utilisateur ou utilisateur non connecté.</p>;
+        return <p>Erreur lors de la récupération de l&apos;utilisateur ou utilisateur non connecté.</p>;
     }
 
     return (

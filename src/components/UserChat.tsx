@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ProfileType } from "@/utils/type";
+import Image from 'next/image';
 
 interface UserChatProps {
     profile: ProfileType;
@@ -9,7 +10,11 @@ interface UserChatProps {
 const UserChat: React.FC<UserChatProps> = ({ profile, onClick }) => {
     return (
         <div onClick={onClick} className="cursor-pointer p-2 hover:bg-gray-200">
-            <img src={profile.photo || './moi.png'} alt={profile.bio || ''} className="w-8 h-8 rounded-full" />
+            <Image
+                src={profile.photo || './moi.png'}
+                alt='photo'
+                className="w-8 h-8 rounded-full" 
+            />
             <span>{profile.user.nickname}</span>
         </div>
     );

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { ProfileType } from "@/utils/type";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ const EditProfile = ({ userId }: { userId: string }) => {
     const [newEducation, setNewEducation] = useState({ name: "", detail: "", graduation_date: "" });
     const router = useRouter();
 
-    const getProfile = async () => {
+    const getProfile = useCallback(async () => {
         setLoading(true);
         try {
             const profileData = await api.get(`profiles/${userId}/`).json<ProfileType>();
@@ -30,7 +30,7 @@ const EditProfile = ({ userId }: { userId: string }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [userId]);
 
     const handleUpdateProfile = async () => {
         try {
@@ -69,7 +69,7 @@ const EditProfile = ({ userId }: { userId: string }) => {
 
     useEffect(() => {
         getProfile();
-    }, [userId]);
+    }, [getProfile]);
 
     if (loading) return <div>Loading...</div>;
     if (!profile) return <div>Profile not found.</div>;

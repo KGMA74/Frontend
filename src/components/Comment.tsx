@@ -63,14 +63,14 @@ const Comment: React.FC<Props> = ({ comment, parentId }) => {
   const fetchResponses = useCallback(async () => {
     try {
       const responsesData = await api
-        .get(`comments/${comment.id}/responses/`) // Remplacez par l'endpoint approprié
+        .get(`comments/${comment.id}/responses/`) 
         .json<postType[]>();
       setResponses(responsesData);
       fetchCommentsNbr();
     } catch (error) {
       console.error("Failed to fetch responses:", error);
     }
-  }, [comment.id]);
+  }, [comment.id, fetchCommentsNbr]);
 
   const handleVote = async (voteType: string) => {
     setLoading(true);
