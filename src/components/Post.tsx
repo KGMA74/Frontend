@@ -10,6 +10,7 @@ import Comment from "./Comment";
 import { api } from "@/utils/api";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import type { postType, voteType } from "@/utils/type";
+import CodeBlock from "./utils/CodeBlock";
 
 interface Props {
     post: postType;
@@ -169,10 +170,9 @@ const Post: React.FC<Props> = ({ post }) => {
                         WebkitLineClamp: 5 
                     }} // Limite à 5 lignes
                 >
-                    {post.details}
+                    <CodeBlock codeString={post.details} />
                 </Link>
 
-                <p className="">{post.details}</p>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-3 mb-4">

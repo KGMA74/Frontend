@@ -6,6 +6,7 @@ import Image from "next/image";
 import Comment from "@/components/Comment";
 import AddComment from "@/components/AddComment";
 import { fetchUserProfile } from "@/utils/apiRequests";
+import CodeBlock from "@/components/utils/CodeBlock";
 
 interface PostPageProps {
     params: { id: string };
@@ -61,8 +62,7 @@ const PostPage: React.FC<PostPageProps> = ({ params }) => {
                 {/* Post Content */}
                 <div className="mt-6">
                     <h2 className="text-2xl font-semibold text-gray-900 mb-4">{post.title}</h2>
-                    <p className="text-gray-700 mb-4">{post.details}</p>
-
+                    <CodeBlock codeString={post.details} />
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
                         {post.tags.map(tag => (

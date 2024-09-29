@@ -8,7 +8,7 @@ export const api = ky.extend({
             async (request, options, response) => {
                 if (response.status === 401) {
                     try {
-                        await api(`jwt/refresh/`)
+                        await api.post(`jwt/refresh/`)
 
                         const relativeUrl = request.url.replace(process.env.NEXT_PUBLIC_API_URL+'/', '');
 

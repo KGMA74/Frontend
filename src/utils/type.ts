@@ -59,11 +59,20 @@ export interface conversationtype {
     users: User[];
 }
 
-export interface messageType {
+export interface instantMessageType {
     id: string;
     name: string;
     body: string;
     conversationId: string;
     sent_to: User;
     author: User;
+}
+
+export interface messageType {
+    id: string;
+    conversation: string;
+    body: string;
+    sent_to: User;
+    author: User;
+    created: string;
 }
