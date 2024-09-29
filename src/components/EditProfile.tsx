@@ -36,7 +36,6 @@ const EditProfile = ({ userId }: { userId: string }) => {
         try {
             const profileData = await api.get(`profiles/${userId}/`).json<ProfileType>();
             setProfile(profileData);
-            setNewNickname(profileData.user.nickname || "");
             setNewBio(profileData.bio || "");
             setNewEmail(profileData.user.email || "");
             setNewSkills(profileData.skills || []);
@@ -49,7 +48,7 @@ const EditProfile = ({ userId }: { userId: string }) => {
 
     const handleAddExperience = async () => {
         try {
-            await api.post(`experiences/`, { json: { ...newExperience, profile: userId } });
+            await api.post(`new/experience/`, { json: { ...newExperience, profile: userId } });
             setNewExperience({ name: "", detail: "", start_date: "", end_date: "" }); // Reset fields
             getProfile(); // Refresh profile data
         } catch (error) {
@@ -59,7 +58,7 @@ const EditProfile = ({ userId }: { userId: string }) => {
 
     const handleAddEducation = async () => {
         try {
-            await api.post(`educations/`, { json: { ...newEducation, profile: userId } });
+            await api.post(`new/education/`, { json: { ...newEducation, profile: userId } });
             setNewEducation({ name: "", detail: "", graduation_date: "" }); // Reset fields
             getProfile(); // Refresh profile data
         } catch (error) {

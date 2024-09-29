@@ -15,6 +15,7 @@ import {
     TagIcon,
     UserIcon,
     QuestionMarkCircleIcon,
+    InboxIcon,
 } from "@heroicons/react/solid"; // Heroicons import
 import Link from "next/link"; // Importer Link pour la navigation
 import { UserProvider } from "@/components/UserProvider";
@@ -31,11 +32,11 @@ export default function RootLayout({
 
     return (
         <Provider>
-            <RequireAuth>
-                <html lang="en">
-                    <body
-                        className={`${'inter.className'} min-h-screen flex flex-col`}
-                    >
+            <html lang="en">
+                <body
+                    className={`${"inter.className"} min-h-screen flex flex-col`}
+                >
+                    <RequireAuth>
                         <Setup />
 
                         {/* Header */}
@@ -57,7 +58,7 @@ export default function RootLayout({
                                                     Home
                                                 </Link>
                                             </li>
-                                            
+
                                             <li>
                                                 <Link
                                                     href="/tags"
@@ -76,10 +77,18 @@ export default function RootLayout({
                                                     Users
                                                 </Link>
                                             </li>
-                                            
-                                            
                                             <li>
-                                            <UserProvider/>
+                                                <Link
+                                                    href="/inbox"
+                                                    className="flex items-center text-gray-600 hover:text-blue-600"
+                                                >
+                                                    <InboxIcon className="w-6 h-6 mr-2 text-gray-500" />
+                                                    Inbox
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <UserProvider />
                                             </li>
                                         </ul>
                                     </nav>
@@ -90,14 +99,13 @@ export default function RootLayout({
                             <main className="flex-grow bg-white p-6 shadow-sm rounded-md overflow-y-auto">
                                 {children}
                             </main>
-
                         </div>
 
                         {/* Footer */}
                         {!isAuthPage && <Footer />}
-                    </body>
-                </html>
-            </RequireAuth>
+                    </RequireAuth>
+                </body>
+            </html>
         </Provider>
     );
 }

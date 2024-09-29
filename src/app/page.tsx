@@ -48,6 +48,7 @@ const Home = () => {
     );
   }
 
+  /*
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen space-y-4">
@@ -61,9 +62,10 @@ const Home = () => {
       </div>
     );
   }
+    */
 
   return (
-    <RequireAuth>
+    <>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Top Questions</h1>
         {!showAddPostForm && <AskQuestion onClick={handleClickAskQuestion} />}
@@ -82,7 +84,7 @@ const Home = () => {
           <Post post={post} key={index} />
         ))}
       </div>
-    </RequireAuth>
+    </>
   );
 };
 

@@ -28,8 +28,9 @@ const useLogin = () => {
 
                 console.log("State after dispatch setAuth:",  Store().getState().auth);
             })
-            .catch(() => {
-                toast.error("login failed");
+            .catch((err) => {
+                const err_msg = err.data.detail || ""
+                toast.error("login failed! "+err_msg);
             });
 
     };

@@ -24,8 +24,9 @@ const useRegister = () => {
                 toast.success("Please check your email to verify account");
                 router.refresh()
             })
-            .catch(() => {
-                toast.error("Failed toregister account");
+            .catch((err) => {
+                const err_msg = err.data.nickname || err.data.email || err.data.password || err.data.non_field_errors || ""
+                toast.error("Failed toregister account! "+err_msg);
             });
     };
     const isLoading_register = isLoading;
